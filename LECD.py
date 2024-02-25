@@ -13,11 +13,35 @@ class LECD:
         self.matrix = self._getMatrix()
         self.modMatrix = self._getModularityMatrix()
 
-        print(self.split())
+        self.groups = defaultdict(list[str])
+        splitVector = self.split()
+
+        for g, v in self.groups.items():
+            print(g, v)
+
+        print(f"Delta: {self.getDelta(splitVector)}")
+
 
     def split(self):
         _, eigenvectors = np.linalg.eig(self.modMatrix)
-        return eigenvectors.T[0]
+        resultVector = eigenvectors.T[0]
+
+        for i, val in enumerate(resultVector):
+            if val < 0:
+                self.groups[0].append(self.nodeList[i])
+            else:
+                self.groups[1].append(self.nodeList[i])
+
+        return resultVector
+
+
+    def getDelta(self, splitVector):
+        firstProd = np.matmul(splitVector.T, self.modMatrix)
+        finalProd = np.matmul(firstProd, splitVector)
+
+        return (finalProd) / (4 * self.graphWeight)
+
+        # delta = (splitVector.T * ) / (4 * self.graphWeight)
         
 
     # generates the list of nodes and maps the nodes to an integer index
