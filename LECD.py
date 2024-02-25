@@ -13,8 +13,12 @@ class LECD:
         self.matrix = self._getMatrix()
         self.modMatrix = self._getModularityMatrix()
 
-        print(self.modMatrix)
+        print(self.split())
 
+    def split(self):
+        _, eigenvectors = np.linalg.eig(self.modMatrix)
+        return eigenvectors.T[0]
+        
 
     # generates the list of nodes and maps the nodes to an integer index
     def _getNodelist(self):
