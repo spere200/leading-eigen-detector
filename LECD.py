@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -42,8 +41,17 @@ class LECD:
                         graphs[1].append([self.nodeList[i], tar, self.matrix[i][tarIndex]])
 
                 groups[1].append(self.nodeList[i])
-        
-        return Split(groups, graphs, self.getDelta(resultVector), resultVector)
+
+        # had to add this correction since in some cases it would just swap the nodes from one
+        # group to another and report an extremely small positive modularity, now if the split 
+        # does not result in two non-empty groups, the delta is set to 0 as it should
+        delta = self.getDelta(resultVector) if len(groups[0]) > 0 and len(groups[1]) > 0 else 0
+
+        # if the split is not an improvement, return the unmodified communities
+        if delta > 0:
+            return Split(groups, graphs, delta, resultVector)
+        else:
+            return Split([self.nodeList, []], [self.edgeList, []], 0, [0] * len(self.nodeList))
 
 
     def getDelta(self, splitVector):
@@ -120,12 +128,3 @@ class Split:
 
     def __str__(self) -> str:
         return f"group1: {self.groups[0]}\ngroup2: {self.groups[1]}\ndelta: {self.delta}"
-
-# used for testing
-if __name__ == "__main__":
-    edgeList = np.array(pd.read_csv('small.csv'))
-    lecd = LECD(edgeList)
-    result = lecd.split()
-
-    for row in result.graphs[1]:
-        print(row)
