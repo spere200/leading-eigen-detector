@@ -40,7 +40,7 @@ class Detector:
 
                 for i, row in enumerate(graphs):
                     df = pd.DataFrame(row)
-                    df.columns = ["src", "tar", "weight"]
+                    df.columns = ["node1", "node2", "weight"]
                     df.to_excel(writer, sheet_name=f"group{i}_edges", index=False)
 
         return DetectorResult(groups, graphs)
