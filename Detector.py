@@ -7,7 +7,7 @@ class Detector:
     def __init__(self, edgeList) -> None:
         self.edgeList = edgeList
 
-    def getLECommunities(self, xls=False):
+    def getLECommunities(self, xls=True):
         groups = []
         graphs = []
 
@@ -29,6 +29,20 @@ class Detector:
 
         dfs(self.edgeList)
 
+        if xls:
+            with pd.ExcelWriter("output_groups.xlsx", engine='xlsxwriter') as writer:
+                # writing the groups with group labels to the first sheet of the document
+                groupHeaders = [f"group{i}" for i in range(len(groups))]
+                df = pd.DataFrame(groups)
+                df = df.transpose()
+                df.columns = groupHeaders
+                df.to_excel(writer, sheet_name="groups", index=False)
+
+                for i, row in enumerate(graphs):
+                    df = pd.DataFrame(row)
+                    df.columns = ["src", "tar", "weight"]
+                    df.to_excel(writer, sheet_name=f"group{i}_edges", index=False)
+
         return DetectorResult(groups, graphs)
 
 
@@ -46,9 +60,9 @@ class DetectorResult:
 
 # used for testing
 if __name__ == "__main__":
-    edgeList = np.array(pd.read_csv('small.csv'))
+    edgeList = np.array(pd.read_csv('COAD.csv'))
     detector = Detector(edgeList)
-    results = detector.getLECommunities(xls=True)
+    results = detector.getLECommunities()
 
     # for row in results.groups:
     #     print(row)
