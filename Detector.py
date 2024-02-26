@@ -56,13 +56,3 @@ class DetectorResult:
 
     def __str__(self) -> str:
         return str(self.groups)
-
-
-# used for testing
-if __name__ == "__main__":
-    edgeList = np.array(pd.read_csv('COAD.csv'))
-    detector = Detector(edgeList)
-    results = detector.getLECommunities()
-
-    # for row in results.groups:
-    #     print(row)
