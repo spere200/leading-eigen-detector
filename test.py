@@ -6,7 +6,7 @@ from Detector import Detector
 if __name__ == "__main__":
     edgeList = np.array(pd.read_csv('data/small.csv'))
     detector = Detector(edgeList)
-    results = detector.getLECommunities(xls=False)
+    results = detector.getLECommunities()
 
     for row in results.groups:
         print(row)
