@@ -6,7 +6,7 @@ class LECD:
     def __init__(self, edgeList: np.ndarray) -> None:
         """
         Leading Eigenvector Community Detector.\n 
-        Create an instance by passing it an adjacency matrix and call LECD.split() to perform a split
+        Create an instance by passing it a list of weighted edges of the form [n1, n2, w] and call LECD.split() to perform a split
         """
         self.graphWeight = 0
         self.edgeList = edgeList

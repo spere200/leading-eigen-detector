@@ -9,7 +9,7 @@ This is a [modularity](<https://en.wikipedia.org/wiki/Modularity_(networks)>) op
 </div>
 <br>
 
-Where _B_ is the modularity matrix, _m_ is the sum of the weight of all edges in the graph, _$\delta$_ is the Kronecker delta equation, and _s_ is a vector with "instructions" on how to divide the graph. So in essence, since nothing can be changed aside from _s_, this algorithm seeks to maximize &Delta;Q by finding the best vector _s_, which in this case happens to be the leading eigenvector.
+Where _B_ is the modularity matrix, _m_ is the sum of the weight of all edges in the graph, &delta; is the Kronecker delta equation, and _s_ is a vector with "instructions" on how to divide the graph. So in essence, since nothing can be changed aside from _s_, this algorithm seeks to maximize &Delta;Q by finding the best vector _s_, which in this case happens to be the leading eigenvector.
 
 ### Algorithm Steps
 
@@ -28,17 +28,26 @@ Where _B_ is the modularity matrix, _m_ is the sum of the weight of all edges in
 By default the program writes the results to an .xlsx file file where the first sheet contains the groups, where each column has the group label as a header and underneath it are all the members of that group. The second sheet onwards contain the actual graph structure for each group, so for example the second sheet contains a list of all edges in the first group found. Here are some examples:
 
 <hr>
-<figure align=center>
-    <img src="docs/sheets.png"/>
-<figcaption>Example of the sheets tab</figcaption>
-</figure>
+<div align=center>
+  <p>The following examples use this graph as its input.</p>
+  <span><img src="docs/input_graph.png" width="53.45%"/></span>
+  <span><img src="docs/input.png" width="20%"/></span>
+</div>
 <hr>
-<figure align=center>
-    <img src="docs/groups.png"/>
-    <figcaption>Example output of the groups sheet</figcaption>
-</figure>
+
+<div align=center>
+  <p>Example of the labelled sheets in the .xlsx file</p>
+  <img src="docs/sheets.png"/>
+</div>
 <hr>
-<figure align=center>
-    <img src="docs/edges.png"/>
-    <figcaption>Example output of the group3_edges sheet</figcaption>
-</figure>
+
+<div align=center>
+  <p>Example of the groups</p>
+  <img src="docs/groups.png"/>
+</div>
+<hr>
+
+<div align=center>
+  <p>Example of an edge list</p>
+  <img src="docs/edges.png"/>
+</div>
