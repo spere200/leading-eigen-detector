@@ -7,7 +7,7 @@ from Detector import Detector
 
 # used for testing
 if __name__ == "__main__":
-    edgeList = np.array(pd.read_csv("data/small.csv"))
+    edgeList = np.array(pd.read_csv("data/COAD.csv"))
 
     # # this was only used to generate the sample graph for the .md file, feel  
     # # free to add it back in if you want but you'll have to install matplotlib 
@@ -22,8 +22,8 @@ if __name__ == "__main__":
 
     # plt.show()
 
-    detector = Detector(edgeList)
+    detector = Detector(edgeList, log=True)
     results = detector.getLECommunities()
 
-    for row in results.groups:
-        print(row)
+    # for row in results.groups:
+    #     print(row)
