@@ -10,3 +10,5 @@ if __name__ == "__main__":
     results = detector.getLECommunities(
         log=True, xlsx=True, visualize=True  # just delete all args to set all to false
     )
+
+    print(results)

@@ -23,7 +23,7 @@ Where _B_ is the modularity matrix, _m_ is the sum of the weight of all edges in
     <img src="docs/mod_delta.png"/>
 </div>
 
-### Output
+### .xslx Output
 
 By default the program writes the results to an .xlsx file file where the first sheet contains the groups, where each column has the group label as a header and underneath it are all the members of that group. The second sheet onwards contain the actual graph structure for each group, so for example the second sheet contains a list of all edges in the first group found. Here are some examples:
 
@@ -50,4 +50,42 @@ By default the program writes the results to an .xlsx file file where the first 
 <div align=center>
   <p>Example of an edge list</p>
   <img src="docs/edges.png"/>
+</div>
+<hr>
+
+### .html Output
+
+If you set visualize=True in Detector.getLECommunities(), an output .html file will be created using pyvis and automatically opened in the user's default browser that will create a visualization of all separate groups with the node labels, where groups are color coded. The visualization can be zoomed in and out, and the graph is interactable.
+
+<hr>
+<div align=center>
+  <p>Example of the color coded output groups when visualize=True</p>
+  <img src="docs/pyvis.png"/>
+</div>
+<hr>
+
+For very large networks, the input will look messy initially, as is the case for this example of a 700 node 7,000 edge network. Simply enable the physics engine in the bottom left of the screen, and this will apply "gravity" between the groups which will cause them to spread apart. If enabled from the start, this could cause the .html to take a very long amount of time to load, as such, it's initially disabled, and left to the user to enable on demand.
+
+<hr>
+<div align=center>
+  <p>Images of a 700 node 7,000 edge graph visualization before and after physics are applied</p>
+  <span><img src="docs/pyvis_complex.png" width="40%"/></span>
+  <span><img src="docs/pyvis_complex_physics.png" width="34.75%"/></span>
+</div>
+
+<hr>
+<div align=center>
+  <p>Image of the physics menu</p>
+  <img src="docs/pyvis_menu.png"/>
+</div>
+<hr>
+
+### Command Line Output
+
+If you set log=True in Detector.getLECommunities(), information about the process will be printed to the console, this can be useful to check progress as well as to time each step in the process.
+
+<hr>
+<div align=center>
+  <p>Example command line output when log=True</p>
+  <img src="docs/cmd_output.png" width="53.45%"/>
 </div>
