@@ -5,7 +5,7 @@ from Detector import Detector
 
 # used for testing
 if __name__ == "__main__":
-    edgeList = np.array(pd.read_csv("data/small.csv"))
+    edgeList = np.array(pd.read_csv("sample_data/small.csv"))
     detector = Detector(edgeList)
     results = detector.getLECommunities(
         log=True, xlsx=True, visualize=True  # just delete all args to set all to false

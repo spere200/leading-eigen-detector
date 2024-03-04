@@ -1,11 +1,13 @@
 import numpy as np
 from collections import defaultdict
-from dataclasses import dataclass
+
+from utils.dataclasses import SplitResult
+
 
 class LECD:
     def __init__(self, edgeList: np.ndarray) -> None:
         """
-        Leading Eigenvector Community Detector.\n 
+        Leading Eigenvector Community Detector.\n
         Create an instance by passing it a list of weighted edges of the form [n1, n2, w] and call LECD.split() to perform a split
         """
         self.graphWeight = 0
@@ -30,7 +32,9 @@ class LECD:
                     tarIndex = self.nodeMap[tar]
 
                     if self.matrix[i][tarIndex] > 0:
-                        graphs[0].append([self.nodeList[i], tar, self.matrix[i][tarIndex]])
+                        graphs[0].append(
+                            [self.nodeList[i], tar, self.matrix[i][tarIndex]]
+                        )
 
                 groups[0].append(self.nodeList[i])
             else:
@@ -38,28 +42,34 @@ class LECD:
                     tarIndex = self.nodeMap[tar]
 
                     if self.matrix[i][tarIndex] > 0:
-                        graphs[1].append([self.nodeList[i], tar, self.matrix[i][tarIndex]])
+                        graphs[1].append(
+                            [self.nodeList[i], tar, self.matrix[i][tarIndex]]
+                        )
 
                 groups[1].append(self.nodeList[i])
 
         # had to add this correction since in some cases it would just swap the nodes from one
-        # group to another and report an extremely small positive modularity, now if the split 
+        # group to another and report an extremely small positive modularity, now if the split
         # does not result in two non-empty groups, the delta is set to 0 as it should
-        delta = self.getDelta(resultVector) if len(groups[0]) > 0 and len(groups[1]) > 0 else 0
+        delta = (
+            self.getDelta(resultVector)
+            if len(groups[0]) > 0 and len(groups[1]) > 0
+            else 0
+        )
 
         # if the split is not an improvement, return the unmodified communities
         if delta > 0:
-            return Split(groups, graphs, delta, resultVector)
+            return SplitResult(groups, graphs, delta, resultVector)
         else:
-            return Split([self.nodeList, []], [self.edgeList, []], 0, [0] * len(self.nodeList))
-
+            return SplitResult(
+                [self.nodeList, []], [self.edgeList, []], 0, [0] * len(self.nodeList)
+            )
 
     def getDelta(self, splitVector):
         firstProd = np.matmul(splitVector.T, self.modMatrix)
         finalProd = np.matmul(firstProd, splitVector)
 
         return (finalProd) / (4 * self.graphWeight)
-        
 
     # generates the list of nodes and maps the nodes to an integer index
     def _getNodelist(self):
@@ -85,21 +95,21 @@ class LECD:
                 counter += 1
 
         return nodeList
-    
-    
+
     def _getModularityMatrix(self):
         """Return the modularity matrix of the graph"""
         modMatrix = np.zeros(self.matrix.shape)
-        
+
         for i in range(len(modMatrix)):
             for j in range(len(modMatrix)):
-                deg1 = np.sum(self.matrix[:,[i]])
-                deg2 = np.sum(self.matrix[:,[j]])
+                deg1 = np.sum(self.matrix[:, [i]])
+                deg2 = np.sum(self.matrix[:, [j]])
 
-                modMatrix[i][j] = self.matrix[i][j] - ((deg1 * deg2) / (2 * self.graphWeight))
+                modMatrix[i][j] = self.matrix[i][j] - (
+                    (deg1 * deg2) / (2 * self.graphWeight)
+                )
 
         return modMatrix
-
 
     def _getMatrix(self):
         """Return the adjacency matrix of the graph"""
@@ -112,19 +122,3 @@ class LECD:
             matrix[node2Index][node1Index] = edge[2]
 
         return matrix
-
-@dataclass
-class Split:
-    """
-    Split.groups contains two lists, where each list has the members by labels of each group.\n
-    Split.graphs contains two lists, where each list contains all the edges of each group.\n
-    Split.delta contains the change in modularity after performing this split.\n
-    Split._splitVector contains the vector that was used to split the group.
-    """
-    groups: list[list[str]]
-    graphs: list[list]
-    delta: float
-    _splitVector: list[float]
-
-    def __str__(self) -> str:
-        return f"group1: {self.groups[0]}\ngroup2: {self.groups[1]}\ndelta: {self.delta}"
