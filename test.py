@@ -11,4 +11,5 @@ if __name__ == "__main__":
         log=True, xlsx=True, visualize=True  # just delete all args to set all to false
     )
 
-    print(results)
+    # print(results.groups)
+    # print(results.graphs)

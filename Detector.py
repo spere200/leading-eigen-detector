@@ -5,6 +5,7 @@ from LeadingEigenvector.LECD import LECD
 
 import utils.display
 from utils.dataclasses import DetectorResult
+from utils.functions import getUnconnectedComponents
 
 
 class Detector:
@@ -29,8 +30,16 @@ class Detector:
             logging.info(f"  Done after {(time.time() - start):.6f} seconds.")
 
             if splitResults.delta <= 0:
-                groups.append(splitResults.groups[0])
-                graphs.append(splitResults.graphs[0])
+                # since the algorithm may place very small unconnected graphs in the same group for very large input graphs
+                # this step is performed to make sure that any generated groups are made up of connected graphs
+                unconnectedResults = getUnconnectedComponents(splitResults.graphs[0])
+
+                for group in unconnectedResults[0]:
+                    groups.append(group)
+
+                for graph in unconnectedResults[1]:
+                    graphs.append(graph)
+
                 logging.info(f"    No good split found, group {len(groups)} created.")
             else:
                 resultGraph1 = splitResults.graphs[0]
